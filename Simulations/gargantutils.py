@@ -12,6 +12,18 @@ def airDensity(temperature=295,staticPressure=1e5):
     Devrait retourner 1.18kg/m3 pour T=295K et P0=1e5
     """
     return staticPressure/(287*temperature)
+def helmholtzParameters(S, V, L, Q=5):
+    """
+    Décrit un résonnateur d'Helmholtz
+    Retourne la constante de rappel (s), la masse (m) et la résistance (R) et meme la frequence de resonnance (w0)
+    pour une aire et longueure du tuyau (S,L), un volume de compression (V) et un facteur de qualité donné
+    """
+    m=airDensity()*S*L
+    s= airDensity()*airSoundSpeed()**2*S**2/V
+    w0=airSoundSpeed()*np.sqrt(S/(L*V))
+    R=w0*m/Q
+    return s, m, R,w0
+
 def airSoundSpeed(temperature=295):
     """
     Donne la vitesse du son dans l'air pour une température donnée (Beranek et Mellow 2012 eq. 1.8)
@@ -164,7 +176,7 @@ if __name__ == "__main__":
     plt.legend()
     plt.xscale('log')
     plt.yscale('log')
-    plt.grid(b=True,which='both')
+    plt.grid(True,which='both')
     plt.xlabel('Frequency (Hz)')
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Power factor')
@@ -182,9 +194,35 @@ if __name__ == "__main__":
     plt.legend()
     plt.xscale('log')
     plt.yscale('log')
-    plt.grid(b=True,which='both')
+    plt.grid(True,which='both')
     plt.xlabel('Frequency (Hz)')
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Power factor')
 
+    D=3*0.0254
+    S=np.pi*(D/2)**2
+    L=0.0254*5
+    V=np.pi*(3/2*0.0254)**2*1
+    Q=100
+    s,m,R,w0=helmholtzParameters(S,V,L,Q)
+    print("Spring constant %.2e, mass %.2e, resistance %.2e, Frequency %.2e"%(s,m,R,w0/(2*np.pi)))
+    plt.figure()
+    tubeLength=3
+    plt.plot(freqs,averagePowerFactor(driveImpedance(freqs,R,m,s),tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)),'-',label="(-) Tube ($L=%d$m), Helmholtz resonnator"%(tubeLength))
+    plt.xscale('log')
+    plt.legend()
+    plt.yscale('log')
+    plt.grid(True,which='both')
+    plt.xlabel('Frequency (Hz)')
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Power factor')
+    plt.figure()
+    Zm=lambda oscMass,oscSpring,oscResistance: driveImpedance(freqs,oscResistance,oscMass,oscSpring)
+    plt.plot(freqs,np.imag(Zm(m,s,R)),'.',label="Helmholtz resonnator")
+    plt.plot(freqs,-np.imag(Zt(3)),'.',label="(-) Tube ($L=3$m)")
+    plt.xscale('log')
+    plt.grid('both')
+    plt.xlabel('Frequency (Hz)')
+    plt.ylabel('Imag. Impedance (Rayls.m$^2$)')
+    plt.legend()
     plt.show()
