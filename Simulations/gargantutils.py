@@ -121,7 +121,7 @@ if __name__ == "__main__":
     freq=30
     print("Une onde a %.2e Hz a une longueure d<onde de %.2e m et un nombre d<onde de %.2e rad m^-1"%(freq,freq2lambda(freq),freq2k(freq)))
     freqs=2*np.logspace(0,2,1000)
-    tubeLength=6
+    tubeLength=10
     tubeRadius=0.25
     oscMass=1
     oscResistance=10
@@ -130,48 +130,48 @@ if __name__ == "__main__":
     print("Osc. resonnance at %.2e Hz"%(1./(2*np.pi)*np.sqrt(oscSpring/oscMass)))
     Zt=lambda tubeLength: tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)
     Zm=lambda oscMass,oscSpring: driveImpedance(freqs,oscResistance,oscMass,oscSpring)
-    plt.figure()
-    plt.plot(freqs,np.imag(Zm(1,36000)),'.',label="Heavy stiff oscillator")
-    plt.plot(freqs,-np.imag(Zt(3)),'.',label="(-) Tube ($L=3$m)")
-    plt.plot(freqs,np.imag(Zm(0.2,36000/5)),'.',label="Light flexible oscillator")
-    plt.plot(freqs,-np.imag(Zt(6)),'.',label="(-) Tube ($L=6$m)")
-    plt.plot(freqs,-np.imag(Zt(1)),'.',label="(-) Tube ($L=1$m)")
-    plt.xscale('log')
-    plt.grid('both')
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Imag. Impedance (Rayls.m$^2$)')
-    plt.legend()
+    #plt.figure()
+    #plt.plot(freqs,np.imag(Zm(1,36000)),'.',label="Heavy stiff oscillator")
+    #plt.plot(freqs,-np.imag(Zt(3)),'.',label="(-) Tube ($L=3$m)")
+    #plt.plot(freqs,np.imag(Zm(0.2,36000/5)),'.',label="Light flexible oscillator")
+    #plt.plot(freqs,-np.imag(Zt(6)),'.',label="(-) Tube ($L=6$m)")
+    #plt.plot(freqs,-np.imag(Zt(1)),'.',label="(-) Tube ($L=1$m)")
+    #plt.xscale('log')
+    #plt.grid('both')
+    #plt.xlabel('Frequency (Hz)')
+    #plt.ylabel('Imag. Impedance (Rayls.m$^2$)')
+    #plt.legend()
 
-    plt.figure()
-    tubeLength=6
+    #plt.figure()
+    #tubeLength=5
+    #tubeRadius=0.25
+    #oscMass=1
+    #oscResistance=10
+    #oscSpring=36000
+    #plt.plot(freqs,averagePowerFactor(driveImpedance(freqs,oscResistance,oscMass,oscSpring),tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)),'-',label="(-) Tube ($L=%d$m), Heavy driver"%(tubeLength))
+    #tubeLength=3
+    #tubeRadius=0.25
+    #oscMass=1
+    #oscResistance=10
+    #oscSpring=36000
+    #plt.plot(freqs,averagePowerFactor(driveImpedance(freqs,oscResistance,oscMass,oscSpring),tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)),'-',label="(-) Tube ($L=%d$m), Heavy driver"%(tubeLength))
+    #tubeLength=1
+    #tubeRadius=0.25
+    #oscMass=1/5
+    #oscResistance=10
+    #oscSpring=36000/5
+    #plt.plot(freqs,averagePowerFactor(driveImpedance(freqs,oscResistance,oscMass,oscSpring),tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)),'-',label="(-) Tube ($L=%d$m), Heavy driver"%(tubeLength))
+    #plt.legend()
+    ##plt.xscale('log')
+    #plt.yscale('log')
+    #plt.grid(b=True,which='both')
+    #plt.xlabel('Frequency (Hz)')
+    #plt.xlabel('Frequency (Hz)')
+    #plt.ylabel('Power factor')
+    #plt.figure()
+    tubeLength=5.5
     tubeRadius=0.25
     oscMass=1
-    oscResistance=10
-    oscSpring=36000
-    plt.plot(freqs,averagePowerFactor(driveImpedance(freqs,oscResistance,oscMass,oscSpring),tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)),'-',label="(-) Tube ($L=%d$m), Heavy driver"%(tubeLength))
-    tubeLength=3
-    tubeRadius=0.25
-    oscMass=1
-    oscResistance=10
-    oscSpring=36000
-    plt.plot(freqs,averagePowerFactor(driveImpedance(freqs,oscResistance,oscMass,oscSpring),tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)),'-',label="(-) Tube ($L=%d$m), Heavy driver"%(tubeLength))
-    tubeLength=1
-    tubeRadius=0.25
-    oscMass=1/5
-    oscResistance=10
-    oscSpring=36000/5
-    plt.plot(freqs,averagePowerFactor(driveImpedance(freqs,oscResistance,oscMass,oscSpring),tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)),'-',label="(-) Tube ($L=%d$m), Heavy driver"%(tubeLength))
-    plt.legend()
-    plt.xscale('log')
-    plt.yscale('log')
-    plt.grid(b=True,which='both')
-    plt.xlabel('Frequency (Hz)')
-    plt.xlabel('Frequency (Hz)')
-    plt.ylabel('Power factor')
-    plt.figure()
-    tubeLength=6
-    tubeRadius=0.25
-    oscMass=1/5
     oscResistance=100
     oscSpring=36000/5
     plt.plot(freqs,averagePowerFactor(driveImpedance(freqs,oscResistance,oscMass,oscSpring),tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)),'-',label="(-) Tube ($L=%d$m), Light driver"%(tubeLength))
@@ -180,7 +180,7 @@ if __name__ == "__main__":
     tubeLength=1
     plt.plot(freqs,averagePowerFactor(driveImpedance(freqs,oscResistance,oscMass,oscSpring),tubeImpedance(tubeLength,freq2k(freqs),tubeRadius)),'-',label="(-) Tube ($L=%d$m), Light driver"%(tubeLength))
     plt.legend()
-    plt.xscale('log')
+    #plt.xscale('log')
     plt.yscale('log')
     plt.grid(b=True,which='both')
     plt.xlabel('Frequency (Hz)')
